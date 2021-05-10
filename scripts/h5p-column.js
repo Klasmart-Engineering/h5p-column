@@ -127,10 +127,16 @@ H5P.Column = (function (EventDispatcher) {
        * Temporary (!) hotfix for custom H5P integration of Kidsloop
        */
       const kidsloopHandleImageResize = function (instance) {
-        instance.$img.css('height', instance.$img.width() / instance.width * instance.height);
-        self.resizingImage = true;
-      }
+        if (
+          typeof instance.width !== 'number' ||
+          typeof instance.height !== 'number' ||
+          !instance.$img
+        ) {
+          return; // Core could not retrieve original size or no image given
+        }
 
+        instance.$img.css('height', instance.$img.width() / instance.width * instance.height);
+      }
       if (library === 'H5P.Image') {
         window.addEventListener('resize', function () {
           kidsloopHandleImageResize(instance);
