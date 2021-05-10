@@ -123,6 +123,23 @@ H5P.Column = (function (EventDispatcher) {
       // Bubble resize events
       bubbleUp(instance, 'resize', self);
 
+      /*
+       * Temporary (!) hotfix for custom H5P integration of Kidsloop
+       */
+      const kidsloopHandleImageResize = function (instance) {
+        instance.$img.css('height', instance.$img.width() / instance.width * instance.height);
+        self.resizingImage = true;
+      }
+
+      if (library === 'H5P.Image') {
+        window.addEventListener('resize', function () {
+          kidsloopHandleImageResize(instance);
+        });
+        self.on('resize', function () {
+          kidsloopHandleImageResize(instance);
+        });
+      }
+
       // Check if instance is a task
       if (Column.isTask(instance)) {
         // Tasks requires completion
