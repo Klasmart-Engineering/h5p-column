@@ -40,6 +40,36 @@ H5PUpgrades['H5P.Column'] = (function () {
 
         // Done
         finished(null, parameters);
+      },
+
+      /**
+       * Asynchronous content upgrade hook.
+       * Transforms CoursePresentation to CoursePresentationKID
+       *
+       * @param {Object} parameters
+       * @param {function} finished
+       */
+      14: function (parameters, finished, extras) {
+        if (parameters && parameters.content) {
+          parameters.content.forEach(function (content) {
+            if (!content.content) {
+              return;
+            }
+
+            /*
+             * Version of H5P.CoursePresentation should be 1.22, but the
+             * KID fork should be able to handle others (earliers) as well.
+             * Important: There are no hard dependencies defined, so it must be
+             * ensured that H5P.CoursePresentationKID 1.24 is installed
+             */
+            if (content.content.library && content.content.library.split(' ')[0] === 'H5P.CoursePresentation') {
+              content.content.library = 'H5P.CoursePresentationKID 1.24'
+            }
+          });
+        }
+
+        // Done
+        finished(null, parameters, extras);
       }
 
     }
