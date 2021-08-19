@@ -28,7 +28,7 @@ H5P.Column = (function (EventDispatcher) {
 
     // H5P content in the column
     var instances = [];
-    var instanceContainers = [];
+    this.instanceContainers = [];
 
     // Number of tasks among instances
     var numTasks = 0;
@@ -164,7 +164,7 @@ H5P.Column = (function (EventDispatcher) {
 
       // Keep track of all instances
       instances.push(instance);
-      instanceContainers.push({
+      self.instanceContainers.push({
         hasAttached: false,
         container: container,
         instanceIndex: instances.length - 1,
@@ -314,7 +314,7 @@ H5P.Column = (function (EventDispatcher) {
       }
 
       // Attach instances that have not been attached
-      instanceContainers.filter(function (container) { return !container.hasAttached })
+      self.instanceContainers.filter(function (container) { return !container.hasAttached })
         .forEach(function (container) {
           instances[container.instanceIndex]
             .attach(H5P.jQuery(container.container));
@@ -462,6 +462,20 @@ H5P.Column = (function (EventDispatcher) {
     self.getTitle = function () {
       return H5P.createTitle((self.contentData && self.contentData.metadata && self.contentData.metadata.title) ? self.contentData.metadata.title : 'Column');
     };
+
+    /**
+     * Jump to position where content with particular subContentId is included.
+     * @param {string} subContentId Particular subContentId.
+     */
+    self.jumpToSubContentId = function(subContentId) {
+      const instances = this.getInstances();
+      for (let i = 0; i < instances.length; i++) {
+        if (instances[i].subContentId === subContentId) {
+          self.instanceContainers[i].container.scrollIntoView();
+          break;
+        }
+      }
+    }
 
     /**
      * Add the question itself to the definition part of an xAPIEvent
