@@ -573,50 +573,30 @@ H5P.Column = (function (EventDispatcher) {
   }
 
   /**
-   * Definition of which content types are tasks
-   */
-  var isTasks = [
-    'H5P.ImageHotspotQuestion',
-    'H5P.Blanks',
-    'H5P.Essay',
-    'H5P.SingleChoiceSet',
-    'H5P.MultiChoice',
-    'H5P.TrueFalse',
-    'H5P.DragQuestion',
-    'H5P.Summary',
-    'H5P.DragText',
-    'H5P.MarkTheWords',
-    'H5P.MemoryGame',
-    'H5P.QuestionSet',
-    'H5P.InteractiveVideo',
-    'H5P.CoursePresentationKID',
-    'H5P.DocumentationTool',
-    'H5P.SpeakTheWords',
-    'H5P.SpeakTheWordsSet',
-    'H5P.ImageMultipleHotspotQuestion',
-    'H5P.JigsawPuzzle'
-  ];
-
-  /**
    * Check if the given content instance is a task (will give a score)
    *
    * @param {Object} instance
    * @return {boolean}
    */
   Column.isTask = function (instance) {
+    // Check whether instance explicitly says it is a task
     if (instance.isTask !== undefined) {
       return instance.isTask; // Content will determine self if it's a task
     }
 
-    // Go through the valid task names
-    for (var i = 0; i < isTasks.length; i++) {
-      // Check against library info. (instanceof is broken in H5P.newRunnable)
-      if (instance.libraryInfo.machineName === isTasks[i]) {
-        return true;
-      }
+    // Check for maxScore > 0
+    const hasMaxScore = (typeof instance.getMaxScore === 'function' && instance.getMaxScore() > 0);
+    if (hasMaxScore) {
+      return true;
     }
 
-    return false;
+    // Check for (temporary) exception
+    const exceptions = [
+      'H5P.Blanks', // Exception required for original V1.12.11 and before, can be removed when later is out or changes merged in
+      'H5P.MemoryGame', // Would need to be investigated why this should be consideres a task
+      'H5P.SpeakTheWordsSet' // Doesn't implement getMaxScore yet
+    ]
+    return exceptions.indexOf(instance.libraryInfo.machineName) !== -1;
   }
 
   /**
