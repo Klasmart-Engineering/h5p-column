@@ -26,5 +26,12 @@
     {
       "path": "styles/h5p-column.css"
     }
+  ],
+  "editorDependencies": [
+    {
+      "machineName": "H5PEditor.CustomLibrarySelector",
+      "majorVersion": 1,
+      "minorVersion": 0
+    }
   ]
 }
