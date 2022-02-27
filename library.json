@@ -6,8 +6,8 @@
   "license": "MIT",
   "author": "Joubel",
   "majorVersion": 1,
-  "minorVersion": 14,
-  "patchVersion": 1,
+  "minorVersion": 15,
+  "patchVersion": 0,
   "runnable": 1,
   "fullscreen": 0,
   "embedTypes": [
@@ -25,6 +25,13 @@
   "preloadedCss": [
     {
       "path": "styles/h5p-column.css"
+    }
+  ],
+  "preloadedDependencies": [
+    {
+      "machineName": "FontKidsLoop",
+      "majorVersion": 1,
+      "minorVersion": 0
     }
   ],
   "editorDependencies": [
